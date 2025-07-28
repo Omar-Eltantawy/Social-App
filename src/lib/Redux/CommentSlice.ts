@@ -23,9 +23,10 @@ export const createComment= createAsyncThunk('commentSlice/createComment',async 
       });
       console.log(data);
       return data;
-    } catch (err: any) {
-        console.log(err.response?.data.error);
-        return thunkAPI.rejectWithValue(err.response?.data?.error || 'Something went wrong');
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { error?: string } } };
+      console.log(error.response?.data?.error);
+      return thunkAPI.rejectWithValue(error.response?.data?.error || 'Something went wrong');
     }
 });
 
@@ -41,7 +42,8 @@ export const commentSlice=createSlice({
             state.loading = false;
             toast.success("Your Comment Added Successfully");
         })
-        .addCase(createComment.rejected,(_,action)=>{
+        .addCase(createComment.rejected,(state,action)=>{
+            state.loading=false;
             toast.error(action.payload as string);
         })
     }

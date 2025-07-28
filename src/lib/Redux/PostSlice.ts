@@ -3,11 +3,14 @@ import { PostsState } from "../types";
 import { getCookie } from "cookies-next/client";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { extractErrorMessage } from "./userSlice";
 
 const initialState:PostsState={
     loading: false,
     posts:null
 }
+
+
 
 // Async thunk for getting all posts
 export const getAllPosts= createAsyncThunk('postSlice/getAllPosts',async (_:void,thunkAPI) => {
@@ -18,9 +21,9 @@ export const getAllPosts= createAsyncThunk('postSlice/getAllPosts',async (_:void
         }
       });
       return data;
-    } catch (err: any) {
-        console.log(err.response?.data.error);
-        return thunkAPI.rejectWithValue(err.response?.data?.error || 'Something went wrong');
+    } catch (err: unknown) {
+        console.log(extractErrorMessage(err));
+        return thunkAPI.rejectWithValue(extractErrorMessage(err));
     }
 });
 
@@ -33,9 +36,9 @@ export const getSpecificPost= createAsyncThunk('postSlice/getSpecificPost',async
         }
       });
       return data;
-    } catch (err: any) {
-        console.log(err.response?.data.error);
-        return thunkAPI.rejectWithValue(err.response?.data?.error || 'Something went wrong');
+    } catch (err: unknown) {
+        console.log(extractErrorMessage(err));
+        return thunkAPI.rejectWithValue(extractErrorMessage(err));
     }
 });
 
@@ -49,9 +52,9 @@ export const CreatePost= createAsyncThunk('postSlice/CreatePost',async (formData
       });
       console.log(data);
       return data;
-    } catch (err: any) {
-        console.log(err.response?.data.error);
-        return thunkAPI.rejectWithValue(err.response?.data?.error || 'Something went wrong');
+    } catch (err: unknown) {
+        console.log(extractErrorMessage(err));
+        return thunkAPI.rejectWithValue(extractErrorMessage(err));
     }
 });
 
