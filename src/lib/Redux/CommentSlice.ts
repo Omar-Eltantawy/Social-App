@@ -14,7 +14,7 @@ const initialState:CommentState={
 
 
 // Async thunk for creating a comment
-export const createComment= createAsyncThunk('commentSlice/createComment',async (comment:CommentState,thunkAPI) => {
+export const createComment= createAsyncThunk('commentSlice/createComment',async (comment:{ content: string; post: string },thunkAPI) => {
     try {
       const { data } = await axios.post(`https://linked-posts.routemisr.com/comments/`,comment,{
         headers:{
